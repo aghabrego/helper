@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.34 - 2024-05-25
+## 1.0.35 - 2024-06-15
 
-  - Agregando prueba para buscar con expresión regular.
+  - Agregando método ```replace HTML Element``` que reemplaza contenido en un html.

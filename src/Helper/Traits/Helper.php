@@ -2,7 +2,9 @@
 
 namespace Weirdo\Helper\Traits;
 
+use DOMXPath;
 use Exception;
+use DOMDocument;
 use ReflectionMethod;
 use Illuminate\Support\Str;
 use libphonenumber\PhoneNumber;
@@ -788,5 +790,36 @@ trait Helper
         }
 
         return $data['playtime_seconds'];
+    }
+
+    /**
+     * @param string $html
+     * @param string $replace
+     * @param string $expression
+     * @param string $byId
+     * @param int $index
+     * @return string|false
+     */
+    public function replaceHTMLElement(string $html, string $replace, string $expression = "//table/tr/td/div/br", string $byId = 'firma-cliente', int $index = -1)
+    {
+        error_reporting(false);
+
+        $doc = new DOMDocument();
+        $doc->loadHTML($html);
+        $xpath = new DOMXPath($doc);
+        $entries = $xpath->query($expression);
+        if ($entries->length > 0) {
+            $temp = new DOMDocument('1.0', 'UTF-8');
+            $temp->loadHTML($replace);
+            $replacement = $temp->getElementById($byId);
+            $firstElement = $entries->item(($index === -1) ? ($entries->length - 1) : $index);
+            $img = $firstElement->ownerDocument->importNode($replacement, true);
+            $firstElement->parentNode->replaceChild($img, $firstElement);
+            $html = $doc->saveHTML();
+
+            return $html;
+        }
+
+        return false;
     }
 }

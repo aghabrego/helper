@@ -218,4 +218,18 @@ class HelperTest extends TestCase
         $result = $base->getProperPhoneFormat('+50762141994');
         $this->assertEquals($result, '62141994');
     }
+
+    public function testReplaceHTMLElement()
+    {
+        $base = new BaseClass();
+
+        $html = file_get_contents(__DIR__ . '/sample-pdf-create.html');
+        $replace = <<<"EOD"
+        <p class="ft00" id="ft08" style="margin: 0; padding: 0; font-size: 18px; font-family: Helvetica; color: #000; position: absolute; top: 1120px; left: 59px; white-space: nowrap;">Hola Mundo</p>
+        EOD;
+
+        $result = $base->replaceHTMLElement($html, $replace, '//body/div', 'ft08');
+
+        $this->assertIsNotBool($result);
+    }
 }
