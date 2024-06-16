@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:ez-vcard 0.10.6
+FN:Angel Hidalgo
+N:Hidalgo;Angel
+EMAIL;TYPE=internet:angel09-08@hotmail.com
+EMAIL;TYPE=internet:criptoy13@gmail.com
+EMAIL;TYPE=internet:ah.criptoy@gmail.com
+EMAIL;TYPE=internet:angel13-1989@hotmail.com
+ORG:Weirdolabs;Desarrollador
+TEL;TYPE=cell:+507 6214-1994
+URL;TYPE=_$!<Other>!$_:ahidalgo.me
+END:VCARD
