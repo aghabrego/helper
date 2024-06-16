@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Str;
 use Weirdo\Helper\BaseClass;
-use Illuminate\Foundation\Application;
 
 if (function_exists('route') && !function_exists('beautiful_route_with_token')) {
     /**
