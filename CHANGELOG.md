@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.36 - 2024-06-15
+## 1.0.37 - 2024-06-22
 
-  - Updating composer for Laravel 10 support.
+  - Agregando clase csv.

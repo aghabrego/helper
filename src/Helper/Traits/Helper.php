@@ -822,4 +822,27 @@ trait Helper
 
         return false;
     }
+
+    /**
+     * Establecer entidades HTML
+     * @param array $datas
+     * @return array
+     */
+    public function setHtmlentities($datas)
+    {
+        $tab = array();
+        foreach ($datas as $key => $data) {
+            if (is_array($data)) {
+                $values = array();
+                foreach ($data as $value) {
+                    $values[] = htmlentities($value, ENT_QUOTES, 'UTF-8');
+                }
+                $tab[] = $values;
+            } else {
+                $tab[$key] = htmlentities($data, ENT_QUOTES, 'UTF-8');
+            }
+        }
+
+        return $tab;
+    }
 }

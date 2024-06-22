@@ -1,0 +1,9 @@
+per_id,per_nombre,per_nombre_id
+1,Mostrar Pantalla de Inicio,index
+2,Mostrar Pantalla de Creación,create
+3,Almacenar Datos Pantalla Creación,store
+4,Mostrar Pantalla Detalle,show
+5,Mostrar Pantalla Editar,edit
+6,Actualizar Datos Pantalla Editar,update
+7,Eliminar Recurso Especificado(destroy),destroy
+8,Eliminar Recurso Especificado(delete),delete
