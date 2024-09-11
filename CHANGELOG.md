@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.37 - 2024-06-22
+## 1.0.38 - 2024-09-10
 
-  - Agregando clase csv.
+  - Agregando tipo nuevo.

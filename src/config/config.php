@@ -158,6 +158,7 @@ return [
         'text/css' => 'css',
         'text/csv' => 'csv',
         'text/html' => 'html',
+        'text/xml' => 'xml',
         'text/n3' => 'n3',
         'text/plain' => 'txt',
         'text/prs.lines.tag' => 'dsc',
