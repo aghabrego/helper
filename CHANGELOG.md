@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.38 - 2024-09-10
+## 1.0.39 - 2024-10-17
 
-  - Agregando tipo nuevo.
+  - Updating dependencies.
