@@ -650,4 +650,17 @@ trait HelperString
     {
         return Str::camel($value);
     }
+
+    /**
+     * Pad a string to a certain length with another string
+     * 
+     * @param string $value
+     * @param int $length
+     */
+    public function strPad(string $value, $length = 3)
+    {
+        $paddedNumber = str_pad($value, $length, '0', STR_PAD_LEFT);
+
+        return $paddedNumber;
+    }
 }

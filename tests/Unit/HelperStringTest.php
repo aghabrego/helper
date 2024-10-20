@@ -264,4 +264,11 @@ class HelperStringTest extends TestCase
         $result = storage_asset('tests/Unit/contact.vcard', true);
         $this->assertNotEquals(false, $result);
     }
+
+    public function testStrPad()
+    {
+        $base = new BaseClass;
+        $result = $base->strPad(1, 3);
+        $this->assertEquals('001', $result);
+    }
 }
