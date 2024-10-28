@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.40 - 2024-10-20
+## 1.0.41 - 2024-10-28
 
-  - Agregando metodo que rellene un valor hasta una longitud determinada con ceros.
+  - Agregar método para obtener detalles de otras páginas.

@@ -232,4 +232,44 @@ class HelperTest extends TestCase
 
         $this->assertIsNotBool($result);
     }
+
+    public function testSendExternalFormDataHipotecaria()
+    {
+        $base = new BaseClass();
+        /** @var \DOMDocument $dom */
+        $dom = $base->sendExternalFormDataHipotecaria("https://dgi-fep.mef.gob.pa/Consultas/FacturasPorCUFE/FE06200002476029-1-815502", [], []);
+        $xpath = new \DOMXPath($dom);
+        $entries = $xpath->query('//div[@id="detalle"]/table/tbody/tr');
+        if ($entries->length > 0) {
+            $tds = [];
+            foreach ($entries as $keyTr => $nodes) {
+                $tds[$keyTr] = [];
+                foreach ($nodes->childNodes as $node) {
+                    $data = $node->attributes->getNamedItem('data-title')->nodeValue;
+                    if ($data) {
+                        $tds[$keyTr][mb_convert_encoding($data, 'ISO-8859-1', 'UTF-8')] = mb_convert_encoding($node->nodeValue, 'ISO-8859-1', 'UTF-8');
+                    }
+                }
+            }
+            $this->assertIsArray($tds);
+            $this->assertCount(15, $tds);
+            foreach ($tds as $td) {
+                $this->assertArrayHasKey('Linea', $td);
+                $this->assertArrayHasKey('Código', $td);
+                $this->assertArrayHasKey('Descripción', $td);
+                $this->assertArrayHasKey('Información de interés', $td);
+                $this->assertArrayHasKey('Cantidad', $td);
+                $this->assertArrayHasKey('Precio', $td);
+                $this->assertArrayHasKey('Descuento', $td);
+                $this->assertArrayHasKey('Monto', $td);
+                $this->assertArrayHasKey('Impuesto', $td);
+                $this->assertArrayHasKey('ISC', $td);
+                $this->assertArrayHasKey('Acarreo', $td);
+                $this->assertArrayHasKey('Seguro', $td);
+                $this->assertArrayHasKey('Total', $td);
+            }
+        } else {
+            $this->assertIsNotBool(false);
+        }
+    }
 }

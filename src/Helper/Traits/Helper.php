@@ -843,4 +843,81 @@ trait Helper
 
         return $tab;
     }
+
+    /**
+     * @param string $url
+     * @param array $params
+     * @param array $inputIds
+     * @return DOMDocument
+     */
+    public function sendExternalFormDataHipotecaria(string $url, array $params, array $inputIds)
+    {
+        /** @var string $path */
+        $path = str_replace('?', '', $this->createTheParametersOfTheUrl('', $params));
+        /** @var \CurlHandle|false $ch */
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept-Language: es-es,en'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $path);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        /** @var string|bool $data */
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        libxml_use_internal_errors(true);
+
+        return $this->modifyFormEntriesHipotecaria($data, $inputIds);
+    }
+
+    /**
+     * @param string|bool $data
+     * @param array $inputIds
+     * @return DOMDocument
+     */
+    public function modifyFormEntriesHipotecaria($data, array $inputIds)
+    {
+        $doc = new DOMDocument();
+        $doc->loadHTML($data);
+        $xpath = new DOMXPath($doc);
+
+        // Crear elemento
+        foreach ($inputIds as $id => $value) {
+            if (isset($value['type'], $value['options']) && $value['type'] === 'select') {
+                /** @var array $options */
+                $options = $value['options'];
+                $nodeA = $doc->getElementById($id);
+                foreach ($options as $option) {
+                    $nodeB = $doc->createElement("option", $option['text']);
+                    $nodeB->setAttribute("value", $option['value']);
+                    if ($value['value'] === $option['value']) {
+                        $nodeB->setAttribute("selected", "selected");
+                    } elseif ($value['value'] === $option['text']) {
+                        $nodeB->setAttribute("selected", "selected");
+                    }
+                    $nodeA->appendChild($nodeB);
+                }
+            } elseif (isset($value['type']) && !isset($value['options']) && $value['type'] === 'select') {
+                $nodeA = $doc->getElementById($id);
+                foreach ($nodeA->childNodes as $option) {
+                    $node = $xpath->query("//{$option->getNodePath()}/attribute::value");
+                    if ($node->item(0)->value === $value['value']) {
+                        $option->setAttribute('selected', 'selected');
+                    }
+                }
+            } elseif (isset($value['type']) && $value['type'] === 'radio') {
+                $nodeA = $doc->getElementById($id);
+                $nodeA->setAttribute('checked', 'checked');
+            } else {
+                $nodeA = $doc->getElementById($id);
+                $nodeA->setAttribute('value', $value['value']);
+            }
+            $doc->saveXML();
+        }
+
+        return $doc;
+    }
 }
