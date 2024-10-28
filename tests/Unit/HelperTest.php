@@ -272,4 +272,16 @@ class HelperTest extends TestCase
             $this->assertIsNotBool(false);
         }
     }
+
+    public function testDownloadTwilioFile()
+    {
+        $base = new BaseClass();
+        $urlTwilio = 'https://api.twilio.com/2010-04-01/Accounts/58495849/Recordings/6856859';
+        $result = $base->downloadTwilioFile($urlTwilio);
+        $this->assertArrayHasKey('direct_result', $result);
+        $this->assertArrayHasKey('transfer_information', $result);
+        $this->assertArrayHasKey('contents', $result);
+        $this->assertArrayHasKey('type', $result);
+        $this->assertEquals($result['type'], 'audio/x-wav');
+    }
 }

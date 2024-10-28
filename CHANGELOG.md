@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.41 - 2024-10-28
+## 1.0.42 - 2024-10-28
 
-  - Agregar método para obtener detalles de otras páginas.
+  - Agregando el método downloadTwilioFile que obtiene detalle de archivo.

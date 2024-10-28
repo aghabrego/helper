@@ -2,6 +2,7 @@
 
 namespace Weirdo\Helper\Traits;
 
+use finfo;
 use DOMXPath;
 use Exception;
 use DOMDocument;
@@ -919,5 +920,32 @@ trait Helper
         }
 
         return $doc;
+    }
+
+    /**
+     * @param string $twilioUrl
+     * @return array
+     */
+    public function downloadTwilioFile($twilioUrl)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $twilioUrl);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+        $info = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        $contents = $this->streamContextCreate($info, null, 'GET'); 
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mineType = $finfo->buffer($contents);
+
+        return [
+            'direct_result' => $result,
+            'transfer_information' => $info,
+            'contents' => $contents,
+            'type' => $mineType,
+        ];
     }
 }
