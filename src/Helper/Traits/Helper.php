@@ -8,6 +8,7 @@ use Exception;
 use DOMDocument;
 use ReflectionMethod;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use libphonenumber\PhoneNumberUtil;
 use Weirdo\Helper\Support\AudioInfo;
 use libphonenumber\PhoneNumberFormat;
@@ -947,5 +948,96 @@ trait Helper
             'contents' => $contents,
             'type' => $mineType,
         ];
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logAlert(string $message, array $context = [])
+    {
+        Log::alert($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logCritical(string $message, array $context = [])
+    {
+        Log::critical($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logDebug(string $message, array $context = [])
+    {
+        Log::debug($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logEmergency(string $message, array $context = [])
+    {
+        Log::emergency($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logError(string $message, array $context = [])
+    {
+        Log::error($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logInfo(string $message, array $context = [])
+    {
+        Log::info($message, $context);
+    }
+
+    /**
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logLaravel($level, string $message, array $context = [])
+    {
+        Log::log($level, $message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logNotice(string $message, array $context = [])
+    {
+        Log::notice($message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public function logWarning(string $message, array $context = [])
+    {
+        Log::warning($message, $context);
     }
 }

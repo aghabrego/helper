@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.42 - 2024-10-28
+## 1.0.43 - 2024-10-29
 
-  - Agregando el método downloadTwilioFile que obtiene detalle de archivo.
+  - Añadiendo el método Laravel para el registro.
