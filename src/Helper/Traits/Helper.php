@@ -216,20 +216,67 @@ trait Helper
             return $url;
         }
 
+        /** @var string $temUrl */
         $temUrl = '';
         if ($prettyRoute === false) {
+            /** @var int $occurr */
             $occurr = $this->getIndexFirstOccurrence($url, '?');
             $temUrl = $occurr === -1 ? "?" : "&";
         }
+        /** @var int $index */
         $index = 0;
         foreach ($params as $key => $param) {
-            $temUrl .= is_string($key) ? "{$key}={$param}" : "{$param}";
-            if ($prettyRoute === false && $index < count($params) - 1) {
-                $temUrl .= "&";
-            } elseif ($prettyRoute === true && $index < count($params) - 1) {
-                $temUrl .= "/";
+            if (is_array($param)) {
+                /** @var int $index2 */
+                $index2 = 0;
+                /** @var int $index4 */
+                $index4 = 0;
+                foreach ($param as $subKey => $subParam) {
+                    if (is_array($subParam)) {
+                        /** @var int $index3 */
+                        $index3 = 0;
+                        foreach ($subParam as $sub2key => $sub2keyValue) {
+                            /** @var int $sub2keyValue */
+                            $sub2keyValue = urlencode($sub2keyValue);
+                            /** @var int $temUrl */
+                            $temUrl .= "{$key}[{$subKey}][{$sub2key}]={$sub2keyValue}";
+                            if ($prettyRoute === false && $index3 < count($subParam) - 1) {
+                                $temUrl .= "&";
+                            } elseif ($prettyRoute === true && $index3 < count($subParam) - 1) {
+                                $temUrl .= "/";
+                            }
+                            $index3++;
+                        }
+                    } else {
+                        /** @var int $temUrl */
+                        $temUrl .= "{$key}[{$subKey}]=" . urlencode($subParam);
+                        if ($prettyRoute === false && $index2 < count($param) - 1) {
+                            $temUrl .= "&";
+                        } elseif ($prettyRoute === true && $index2 < count($param) - 1) {
+                            $temUrl .= "/";
+                        }
+                        $index2++;
+                    }
+                    /** @var array $withM */
+                    $withM = array_first($param);
+                    if (is_array($withM)) {
+                        if ($prettyRoute === false && $index4 < count($param) - 1) {
+                            $temUrl .= "&";
+                        } elseif ($prettyRoute === true && $index4 < count($param) - 1) {
+                            $temUrl .= "/";
+                        }
+                        $index4++;
+                    }
+                }
+            } else {
+                $temUrl .= is_string($key) ? "{$key}={$param}" : "{$param}";
+                if ($prettyRoute === false && $index < count($params) - 1) {
+                    $temUrl .= "&";
+                } elseif ($prettyRoute === true && $index < count($params) - 1) {
+                    $temUrl .= "/";
+                }
+                $index++;
             }
-            $index++;
         }
 
         return "{$url}{$temUrl}";

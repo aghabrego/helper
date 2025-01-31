@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.43 - 2024-10-29
+## 1.0.44 - 2025-01-30
 
-  - Añadiendo el método Laravel para el registro.
+  - Mejorando método de creación de url según parámetros.

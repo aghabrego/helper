@@ -284,4 +284,64 @@ class HelperTest extends TestCase
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals($result['type'], 'audio/x-wav');
     }
+
+    public function testCreateTheParametersOfTheUrl()
+    {
+        $base = new BaseClass();
+        $result = $base->createTheParametersOfTheUrl("/api/acicloud/customers/", ['hola'], true);
+        $this->assertEquals($result, "/api/acicloud/customers/hola");
+
+        $result = $base->createTheParametersOfTheUrl("/api/acicloud/customers", [
+            'filter_match' => 'and',
+            'f' => [
+                'column' => 'CustomerID',
+                'operator' => 'not_between',
+                'query_1' => '1',
+                'query_2' => '3',
+            ]
+        ]);
+        $this->assertEquals($result, "/api/acicloud/customers?filter_match=and&f[column]=CustomerID&f[operator]=not_between&f[query_1]=1&f[query_2]=3");
+
+        $result = $base->createTheParametersOfTheUrl("/api/acicloud/customers", [
+            'filter_match' => 'and',
+            'f' => [
+                [
+                    'column' => 'CustomerID',
+                    'operator' => 'invalid_operator',
+                    'query_1' => 'not_between',
+                ],
+            ]
+        ]);
+        $this->assertEquals($result, "/api/acicloud/customers?filter_match=and&f[0][column]=CustomerID&f[0][operator]=invalid_operator&f[0][query_1]=not_between");
+
+        $result = $base->createTheParametersOfTheUrl("/api/acicloud/customers", [
+            'filter_match' => 'and',
+        ]);
+        $this->assertEquals($result, "/api/acicloud/customers?filter_match=and");
+
+        $result = $base->createTheParametersOfTheUrl("/api/acicloud/customers", [
+            'filter_match' => 'and',
+            'f' => [
+                [
+                    'column' => 'CustomerID',
+                    'operator' => 'not_between',
+                    'query_1' => '1',
+                    'query_2' => '5',
+                ],
+                [
+                    'column' => 'CustomerID',
+                    'operator' => 'not_between',
+                    'query_1' => '6',
+                    'query_2' => '10',
+                ],
+                [
+                    'column' => 'CustomerID',
+                    'operator' => 'not_between',
+                    'query_1' => '11',
+                    'query_2' => '15',
+                ],
+            ]
+        ]);
+        $this->assertEquals($result, "/api/acicloud/customers?filter_match=and&f[0][column]=CustomerID&f[0][operator]=not_between&f[0][query_1]=1&f[0][query_2]=5&f[1][column]=CustomerID&f[1][operator]=not_between&f[1][query_1]=6&f[1][query_2]=10&f[2][column]=CustomerID&f[2][operator]=not_between&f[2][query_1]=11&f[2][query_2]=15");
+    }
 }
