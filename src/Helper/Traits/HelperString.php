@@ -199,9 +199,10 @@ trait HelperString
     /**
      * @param float $money
      * @param integer $name
+     * @param integer $decimal
      * @return string
      */
-    public function getMoneyFormat($money = 0, $format = NumberFormatter::CURRENCY, $local = 'es_US')
+    public function getMoneyFormat($money = 0, $format = NumberFormatter::CURRENCY, $local = 'es_US', int $decimal = 2)
     {
         if ($this->filterVar($money, FILTER_VALIDATE_INT) === false) {
             $money = !empty($money) ? (string) $money : '0';
@@ -211,6 +212,7 @@ trait HelperString
         }
 
         $numberFormatter = new NumberFormatter($local, $format);
+        $numberFormatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimal);
 
         return $numberFormatter->format($money);
     }

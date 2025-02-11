@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.44 - 2025-01-30
+## 1.0.45 - 2025-02-11
 
-  - Mejorando método de creación de url según parámetros.
+  - Agregando parametro adicional para controlar los decimales.

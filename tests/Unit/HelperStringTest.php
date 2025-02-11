@@ -161,10 +161,16 @@ class HelperStringTest extends TestCase
         $this->assertEquals('$16,020.00', $result);
 
         $result = $base->getMoneyFormat(16020.00, NumberFormatter::DECIMAL);
-        $this->assertEquals('16,020', $result);
+        $this->assertEquals('16,020.00', $result);
 
         $result = $base->getMoneyFormat('-', NumberFormatter::DECIMAL);
-        $this->assertEquals('0', $result);
+        $this->assertEquals('0.00', $result);
+
+        $result = $base->getMoneyFormat('-', NumberFormatter::DECIMAL, 'es_US', 6);
+        $this->assertEquals('0.000000', $result);
+
+        $result = $base->getMoneyFormat(16020.00, NumberFormatter::DECIMAL, 'es_US', 6);
+        $this->assertEquals('16,020.000000', $result);
     }
 
     public function testConvertAmountinDigittoWords()
