@@ -25,32 +25,32 @@ trait HelperString
     {
         $string = trim($string);
         $string = $this->strReplaceDeep(
-            array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
-            array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
+            array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä', 'Ã'),
+            array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A'),
             $string,
             $delimiterToIgnore
         );
         $string = $this->strReplaceDeep(
-            array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
-            array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
+            array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë', 'Ẽ'),
+            array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'E'),
             $string,
             $delimiterToIgnore
         );
         $string = $this->strReplaceDeep(
-            array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
-            array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
+            array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î', 'Ĩ'),
+            array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I', 'I'),
             $string,
             $delimiterToIgnore
         );
         $string = $this->strReplaceDeep(
-            array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
-            array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
+            array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô', 'Õ'),
+            array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O'),
             $string,
             $delimiterToIgnore
         );
         $string = $this->strReplaceDeep(
-            array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
-            array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
+            array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü', 'Ũ'),
+            array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U', 'U'),
             $string,
             $delimiterToIgnore
         );

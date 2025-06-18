@@ -205,6 +205,9 @@ class HelperStringTest extends TestCase
         $base = new BaseClass;
         $result = $base->cleanSpecialCharacters('Ángel Hidalgo');
         $this->assertEquals('AngelHidalgo', $result);
+
+        $result = $base->cleanSpecialCharacters("db_6_Ãh");
+        $this->assertEquals('db_6_Ah', $result);
     }
 
     public function testPregReplaceString()
