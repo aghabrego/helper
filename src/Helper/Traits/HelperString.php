@@ -24,6 +24,16 @@ trait HelperString
     public function cleanSpecialCharacters($string, $delimiterToIgnore = null, $specialCharacters = '')
     {
         $string = trim($string);
+        // Normaliza caracteres mal codificados a UTF-8
+        if (!mb_check_encoding($string, 'UTF-8')) {
+            $string = mb_convert_encoding($string, 'UTF-8', 'ISO-8859-1');
+        }
+        // Convierte caracteres Unicode/acento a ASCII
+        if (class_exists('Transliterator')) {
+            $string = transliterator_transliterate('Any-Latin; Latin-ASCII', $string);
+        } else {
+            $string = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $string);
+        }
         $string = $this->strReplaceDeep(
             array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä', 'Ã'),
             array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A'),
