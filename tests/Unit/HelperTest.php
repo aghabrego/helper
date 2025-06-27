@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use ReflectionMethod;
 use Weirdo\Helper\BaseClass;
+use libphonenumber\PhoneNumberFormat;
 
 class HelperTest extends TestCase
 {
@@ -343,5 +344,47 @@ class HelperTest extends TestCase
             ]
         ]);
         $this->assertEquals($result, "/api/acicloud/customers?filter_match=and&f[0][column]=CustomerID&f[0][operator]=not_between&f[0][query_1]=1&f[0][query_2]=5&f[1][column]=CustomerID&f[1][operator]=not_between&f[1][query_1]=6&f[1][query_2]=10&f[2][column]=CustomerID&f[2][operator]=not_between&f[2][query_1]=11&f[2][query_2]=15");
+    }
+
+    public function testTryToGetCellCode()
+    {
+        $base = new BaseClass();
+        $codec = $base->tryToGetCellCode('8509403447');
+        $this->assertEquals("PA", $codec);
+
+        $codec = $base->tryToGetCellCode('+18509403447');
+        $this->assertEquals("US", $codec);
+
+        $codec = $base->tryToGetCellCode('+507 202 1767');
+        $this->assertEquals("PA", $codec);
+    }
+
+    public function testProperMobileFormat()
+    {
+        $base = new BaseClass();
+        $result = $base->getProperMobileFormat('+18509403447');
+        $this->assertEquals($result, '+18509403447');
+
+        $result = $base->getProperMobileFormat('+507 202 1767');
+        $this->assertEquals($result, '2021767');
+
+        $result = $base->getProperMobileFormat('+507 6214 1994');
+        $this->assertEquals($result, '62141994');
+    }
+
+    public function testProperMobileAccordingToCode()
+    {
+        $base = new BaseClass();
+        $result = $base->getProperMobileAccordingToCode('+18509403447');
+        $this->assertEquals($result, '+18509403447');
+
+        $result = $base->getProperMobileAccordingToCode('+507 202 1767');
+        $this->assertEquals($result, '+5072021767');
+
+        $result = $base->getProperMobileAccordingToCode('202 1767');
+        $this->assertEquals($result, '+5072021767');
+
+        $result = $base->getProperMobileAccordingToCode('whatsapp:+18509403447');
+        $this->assertEquals($result, '+18509403447');
     }
 }

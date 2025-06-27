@@ -329,18 +329,25 @@ trait Helper
 
     /**
      * @param string $phone
-     * @return string
+     * @return string|null
      */
     public function getRegionCodeForNumber(string $phone)
     {
-        /** @var \libphonenumber\PhoneNumber $phoneNumberUtil */
-        $phoneNumber  = $this->getPhoneNumberObject($phone);
-        /** @var \libphonenumber\PhoneNumberUtil $util */
-        $phoneNumberUtil = PhoneNumberUtil::getInstance();
-        /** @var string|null $natinalCode */
-        $regionCode = $phoneNumberUtil->getRegionCodeForNumber($phoneNumber);
+        if (empty($phone)) {
+            return null;
+        }
+        try {
+            /** @var \libphonenumber\PhoneNumber $phoneNumberUtil */
+            $phoneNumber  = $this->getPhoneNumberObject($phone);
+            /** @var \libphonenumber\PhoneNumberUtil $util */
+            $phoneNumberUtil = PhoneNumberUtil::getInstance();
+            /** @var string|null $natinalCode */
+            $regionCode = $phoneNumberUtil->getRegionCodeForNumber($phoneNumber);
 
-        return $regionCode;
+            return $regionCode;
+        } catch (\libphonenumber\NumberParseException $e) {
+            return null;
+        }
     }
 
     /**
@@ -404,6 +411,28 @@ trait Helper
     }
 
     /**
+     * @param string|null $phone
+     * @param string $defaultValue
+     * @return string
+     */
+    public function tryToGetCellCode(string $phone, string $defaultValue = 'PA')
+    {
+        /** @var null|string $codec */
+        $codec = null;
+        try {
+            /** @var string|null $codec */
+            $codec = $this->getRegionCodeForNumber($phone);
+        } catch (\Exception $e) {
+            //
+        }
+        if (empty($codec)) {
+            $codec = $defaultValue;
+        }
+
+        return $codec;
+    }
+
+    /**
      * @param string|null $cell
      * @return string|null
      */
@@ -432,6 +461,58 @@ trait Helper
         }
 
         return $stPhone;
+    }
+
+    /**
+     * @param string $phone
+     * @param string|null $codeDefault
+     * @param int $formatDefault
+     * @return string|null
+     */
+    public function getProperMobileFormat(string $phone, string $codeDefault = 'PA', int $formatDefault = PhoneNumberFormat::NATIONAL)
+    {
+        if (empty($phone)) {
+            return null;
+        }
+
+        /** @var int $format */
+        $format = PhoneNumberFormat::INTERNATIONAL;
+        /** @var null|string $codec */
+        $codec = $this->tryToGetCellCode($phone);
+        //
+        if ($codec === $codeDefault) {
+            $format = $formatDefault;
+        }
+        /** @var string|null $valid */
+        $valid = $this->getValidCellPhoneFormat($phone, $codec, $format);
+        if (empty($valid)) {
+            return null;
+        }
+        if ($format === $formatDefault) {
+            return $valid;
+        }
+
+        return "+{$valid}";
+    }
+
+    /**
+     * @param string $phone
+     * @param int $format
+     * @return string|null
+     */
+    public function getProperMobileAccordingToCode(string $phone, int $format = PhoneNumberFormat::E164)
+    {
+        if (empty($phone)) {
+            return null;
+        }
+
+        /** @var string $codec */
+        $codec = $this->tryToGetCellCode($phone);
+        
+        /** @var string $codec */
+        $agentPhone = $this->checkPhonePanama($phone, $codec, $format);
+
+        return $agentPhone;
     }
 
     /**
