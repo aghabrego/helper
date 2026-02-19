@@ -258,7 +258,7 @@ trait Helper
                         $index2++;
                     }
                     /** @var array $withM */
-                    $withM = array_first($param);
+                    $withM = \Illuminate\Support\Arr::first($param);
                     if (is_array($withM)) {
                         if ($prettyRoute === false && $index4 < count($param) - 1) {
                             $temUrl .= "&";

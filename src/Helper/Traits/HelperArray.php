@@ -96,7 +96,7 @@ trait HelperArray
             $value = $this->filterVar($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
 
-        return array_first($array, function ($current, $key) use ($value, $strict) {
+        return \Illuminate\Support\Arr::first($array, function ($current, $key) use ($value, $strict) {
             if (($strict === true) && (is_numeric($current))) {
                 $current = $this->filterVar($current, FILTER_VALIDATE_INT);
             } elseif (($strict === true) && ($this->filterVar($current, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === true || $this->filterVar($current, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false)) {
@@ -290,7 +290,7 @@ trait HelperArray
         /** @var bool */
         $typeInt = $this->verifyOnlyOneType($keys, 'integer');
         if ($withSubquery === true) {
-            $result = array_first($this->__onlyValuesWith($current, $keys));
+            $result = \Illuminate\Support\Arr::first($this->__onlyValuesWith($current, $keys));
         } elseif (is_array($current) && $typeInt === false) { // String
             // Obtenemos un subconjunto de los elementos de la matriz dada.
             $result = array_only($current, $keys);
@@ -320,7 +320,7 @@ trait HelperArray
                     $newResult[$newKey] = $found;
                 } elseif ($withSubquery === true) {
                     $found = array_where($result, function ($current, $currentKey) use ($value, $keys) {
-                        $only = array_first($this->__onlyValuesWith($value, $keys));
+                        $only = \Illuminate\Support\Arr::first($this->__onlyValuesWith($value, $keys));
                         $test = $this->getAllAssociatedKeyValues($current, $only[$currentKey]);
 
                         return $test !== -1;
@@ -379,12 +379,14 @@ trait HelperArray
     public function arrayFirstWith(array $array, $value, $with_expression = false)
     {
         if (is_array($value)) {
-            return array_first($array, function ($current, $key) use ($value, $with_expression) {
+            $result = \Illuminate\Support\Arr::first($array, function ($current, $key) use ($value, $with_expression) {
                 /** @var array */
                 $result = $this->_arrayFirstColumn($current, $key, $value, $with_expression);
 
                 return $result['sw'];
-            });
+            }, null);
+            
+            return $result;
         }
 
         return $this->arrayFirst($array, $value);
@@ -507,8 +509,15 @@ trait HelperArray
         if ($sort_descending === false && $keep_keys_in_sub === true) {
             throw new \Exception("The `` Keep_Keys_sub``````` `is not required if the parameter` `sort_descending``` it is false.", 1);
         }
+        
+        // Si el array está vacío, no hay nada que ordenar
+        if (empty($array)) {
+            return;
+        }
+        
         $temp_array = $array;
-        if ($this->itIsAMatrix(array_first($array, null, [])) === false) {
+        $firstElement = \Illuminate\Support\Arr::first($array, null, []);
+        if (!is_array($firstElement) || $this->itIsAMatrix($firstElement) === false) {
             $temp_array = [$array];
         }
 
@@ -542,8 +551,9 @@ trait HelperArray
             }
         }
 
-        if ($this->itIsAMatrix(array_first($array, null, [])) === false) {
-            $array = array_first($temp_array);
+        $firstElement = \Illuminate\Support\Arr::first($array, null, []);
+        if (!is_array($firstElement) || $this->itIsAMatrix($firstElement) === false) {
+            $array = \Illuminate\Support\Arr::first($temp_array);
         } else {
             $array = $temp_array;
         }
@@ -775,7 +785,7 @@ trait HelperArray
                 if (is_array($originValue) && count($originValue) > 0) {
                     $tempArray = [];
                     $resultValue = null;
-                    $tempArray = array_first($value, function ($currentValue, $key) use (&$resultValue, $values) {
+                    $tempArray = \Illuminate\Support\Arr::first($value, function ($currentValue, $key) use (&$resultValue, $values) {
                         $result = empty($this->arrayFirstWith($values, $currentValue));
                         if ($result) {
                             $resultValue = $currentValue;
@@ -996,7 +1006,7 @@ trait HelperArray
 
         $types = $config['file_types'];
 
-        $newTypes = array_first($types, function ($ext, $type) use ($match) {
+        $newTypes = \Illuminate\Support\Arr::first($types, function ($ext, $type) use ($match) {
             if (preg_match("/$match/i", $type)) {
                 return true;
             }

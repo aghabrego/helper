@@ -165,7 +165,7 @@ trait HelperString
         $current = [];
         if (isset($aFilters) && count($aFilters) > 0) {
             foreach ($aFilters as $filter) {
-                $result = array_first(
+                $result = \Illuminate\Support\Arr::first(
                     $current,
                     function ($value) use ($filter) {
                         return $value === $filter;
@@ -647,7 +647,7 @@ trait HelperString
             return null;
         }
 
-        return array_first($types, function ($type) use ($match) {
+        return \Illuminate\Support\Arr::first($types, function ($type) use ($match) {
             return preg_match($match, $type);
         });
     }
