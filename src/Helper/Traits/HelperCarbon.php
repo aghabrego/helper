@@ -138,7 +138,8 @@ trait HelperCarbon
         $cDateA = $this->createCarbonFormat($dateA, $format);
         $cDateB = $this->createCarbonFormat($dateB, $format);
 
-        return $cDateA->diffInHours($cDateB);
+        // Carbon 3 devuelve decimales, así que mantenemos compatibilidad hacia atrás redondeando hacia abajo
+        return (int) floor($cDateA->diffInHours($cDateB));
     }
 
     /**
