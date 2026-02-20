@@ -12,6 +12,9 @@
 - Actualizado composer.json para soportar Laravel Framework ^11.0|^12.0
 - Actualizado nesbot/carbon para soportar ^2.39.1|^3.8.4
 
+### Eliminado
+- Removida dependencia `twilio/sdk` (no utilizada en el código, solo se usa cURL nativo para APIs de Twilio)
+
 ### Técnico
 - Laravel Framework actualizado a v12.52.0
 - Carbon actualizado a v3.11.1
